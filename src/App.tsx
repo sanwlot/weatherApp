@@ -12,6 +12,7 @@ function App() {
     country: "IN",
     state: "Rajasthan",
   })
+  const [recentCities, setRecentCities] = useState([])
 
   const coordinates = {
     lattitude: currentCity.lat,
@@ -39,6 +40,9 @@ function App() {
     )
       .then((res) => res.json())
       .then((data) => setCurrentCity(data[0]))
+    if (recentCities.length < 5) {
+      setRecentCities([...recentCities, cityName])
+    }
   }
 
   if (!weatherData) return "App loading..."
@@ -47,6 +51,17 @@ function App() {
       <h1>Weather Dashboard</h1>
       <FindCity handleClick={handleFindCity} />
       <WeatherInfo weatherData={weatherData} />
+      <aside>
+        <h2>Recent Cities</h2>
+        <ul>
+          {recentCities &&
+            recentCities.map((city, i) => (
+              <li onClick={() => handleFindCity(city)} key={i}>
+                {city}
+              </li>
+            ))}
+        </ul>
+      </aside>
     </div>
   )
 }
