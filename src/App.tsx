@@ -7,20 +7,22 @@ import cities from "./dummyWeatherData"
 function App() {
   const [weatherData, setWeatherData] = useState(cities)
   const [currentCity, setCurrentCity] = useState({})
-  // const [coordinates, setCoordinates] = useState({
-  //   longitude: 0,
-  //   lattitude: 0,
-  // })
+  const coordinates = {
+    longitude: currentCity.lon,
+    lattitude: currentCity.lat,
+  }
+  const lat = coordinates.lattitude
+  const lon = coordinates.longitude
 
   const API_KEY = "8d9b428eb63ea3470f3456a531ec6235"
 
   useEffect(() => {
     fetch(
-      `https://api.openweathermap.org/data/3.0/onecall?lat=33.44&lon=-94.04&exclude=hourly,daily&appid=${API_KEY}`
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
     )
       .then((res) => res.json())
-      .then((data) => console.log(data))
-  }, [])
+      .then((data) => console.log("weather details:", data))
+  }, [currentCity])
 
   function handleFindCity(cityName: string) {
     fetch(
@@ -29,7 +31,6 @@ function App() {
       .then((res) => res.json())
       .then((data) => setCurrentCity(data[0]))
   }
-  console.log(currentCity)
 
   return (
     <div>
