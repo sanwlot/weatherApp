@@ -15,7 +15,13 @@ export default function FindCity({ handleClick, toggleUnit }) {
         className={styles.input}
       />
       <ButtonGroup>
-        <button className="btn btn-secondary" onClick={() => handleClick(city)}>
+        <button
+          className="btn btn-secondary"
+          onClick={() => {
+            handleClick(city)
+            setCity("")
+          }}
+        >
           Find
         </button>
         <ToggleTempUnit toggleUnit={toggleUnit} />
