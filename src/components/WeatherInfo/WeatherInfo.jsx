@@ -11,7 +11,10 @@ export default function WeatherInfo({ weatherData }) {
   function handleClick() {
     setIsCelsius(!isCelsius)
   }
-  if (!weatherData) return "info Loading..."
+
+  if (!weatherData.weather || weatherData.weather.length === 0) {
+    return "info Loading..."
+  }
 
   return (
     <section>
@@ -29,9 +32,7 @@ export default function WeatherInfo({ weatherData }) {
         </p>
       </div>
       <div>
-        <p>
-          {/* Weather condition: {weatherData.weather[0].description} {icon} */}
-        </p>
+        <p>Weather condition: {weatherData.weather[0].description}</p>
       </div>
       <div>
         <p>Humidity: {weatherData.main?.humidity}</p>

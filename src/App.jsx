@@ -40,13 +40,16 @@ function App() {
     )
       .then((res) => res.json())
       .then((data) => setCurrentCity(data[0]))
-    if (recentCities.length < 5) {
-      setRecentCities([...recentCities, cityName])
-    } else {
-      setRecentCities((prev) => {
-        prev.pop()
-        return [cityName, ...prev]
-      })
+      .catch((e) => console.error(e))
+    if (!recentCities.includes(cityName)) {
+      if (recentCities.length < 5) {
+        setRecentCities([...recentCities, cityName])
+      } else {
+        setRecentCities((prev) => {
+          prev.pop()
+          return [cityName, ...prev]
+        })
+      }
     }
   }
 
