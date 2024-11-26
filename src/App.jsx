@@ -40,7 +40,7 @@ function App() {
 
     try {
       fetch(
-        `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`
+        `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`
       )
         .then((res) => res.json())
         .then((data) => setCurrentCity(data[0]))
