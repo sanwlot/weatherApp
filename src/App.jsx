@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import "./App.css"
 import WeatherInfo from "./components/WeatherInfo/WeatherInfo"
 import FindCity from "./components/FindCity/FindCity"
+import styles from "./App.module.css"
 
 function App() {
   const [weatherData, setWeatherData] = useState({})
@@ -13,6 +13,9 @@ function App() {
     state: "Rajasthan",
   })
   const [recentCities, setRecentCities] = useState([])
+  const [isMetric, setIsMetric] = useState(true)
+
+  const tempUnit = isMetric ? "metric" : "imperial"
 
   const coordinates = {
     lattitude: currentCity.lat,
@@ -25,22 +28,27 @@ function App() {
 
   useEffect(() => {
     fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${tempUnit}`
     )
       .then((res) => res.json())
       .then((data) => setWeatherData(data))
       .catch((e) => console.error(e))
-  }, [lat, lon])
-
-  console.log("APP, weatherData: ", weatherData)
+  }, [lat, lon, tempUnit])
 
   function handleFindCity(cityName) {
-    fetch(
-      `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`
-    )
-      .then((res) => res.json())
-      .then((data) => setCurrentCity(data[0]))
-      .catch((e) => console.error(e))
+    if (!cityName) return
+
+    try {
+      fetch(
+        `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`
+      )
+        .then((res) => res.json())
+        .then((data) => setCurrentCity(data[0]))
+        .catch((e) => console.error("city was not found!", e))
+    } catch (error) {
+      console.log("could not find the city that you entered!", error)
+    }
+
     if (!recentCities.includes(cityName)) {
       if (recentCities.length < 5) {
         setRecentCities([...recentCities, cityName])
@@ -52,29 +60,22 @@ function App() {
       }
     }
   }
+  function toggleUnit() {
+    setIsMetric(!isMetric)
+  }
 
   if (!weatherData) return "App loading..."
   return (
-    <div>
-      <h1>Weather Dashboard</h1>
-      <FindCity handleClick={handleFindCity} />
-      <WeatherInfo weatherData={weatherData} />
-      <aside>
-        <h2>Recent Cities</h2>
-        <ul>
-          {recentCities &&
-            recentCities.map((city, i) => (
-              <li
-                style={{ cursor: "pointer" }}
-                onClick={() => handleFindCity(city)}
-                key={i}
-              >
-                {city}
-              </li>
-            ))}
-        </ul>
-      </aside>
-    </div>
+    <main className={styles.main}>
+      <h1 className={styles.heading}>Weather Info</h1>
+      <FindCity handleClick={handleFindCity} toggleUnit={toggleUnit} />
+      <WeatherInfo
+        isMetric={isMetric}
+        weatherData={weatherData}
+        recentCities={recentCities}
+        handleFindCity={handleFindCity}
+      />
+    </main>
   )
 }
 
