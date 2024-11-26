@@ -2,6 +2,11 @@ import { useEffect, useState } from "react"
 import WeatherInfo from "./components/WeatherInfo/WeatherInfo"
 import FindCity from "./components/FindCity/FindCity"
 import styles from "./App.module.css"
+import clearSkyImg from "./assets/bgImgs/clear.jpg"
+import cloudsImg from "./assets/bgImgs/clouds.jpg"
+import hazeImg from "./assets/bgImgs/haze.jpg"
+import snowImg from "./assets/bgImgs/snow.jpg"
+import rainImg from "./assets/bgImgs/rain.jpg"
 
 function App() {
   const [weatherData, setWeatherData] = useState({})
@@ -17,6 +22,34 @@ function App() {
 
   const tempUnit = isMetric ? "metric" : "imperial"
 
+  let bgImg
+
+  try {
+    if (weatherData.weather[0].main === "Clear") {
+      bgImg = clearSkyImg
+    }
+    if (weatherData.weather[0].main === "Clouds") {
+      bgImg = cloudsImg
+    }
+    if (weatherData.weather[0].main === "Rain") {
+      bgImg = rainImg
+    }
+    if (weatherData.weather[0].main === "Snow") {
+      bgImg = snowImg
+    }
+    if (weatherData.weather[0].main === "Haze") {
+      bgImg = hazeImg
+    }
+  } catch (error) {
+    console.log("could not load weather!", error)
+  }
+
+  const bgImgStyles = {
+    backgroundImage: `url(${bgImg})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }
+
   const coordinates = {
     lattitude: currentCity.lat,
     longitude: currentCity.lon,
@@ -24,6 +57,7 @@ function App() {
 
   const lat = coordinates.lattitude
   const lon = coordinates.longitude
+
   const API_KEY = "8d9b428eb63ea3470f3456a531ec6235"
 
   useEffect(() => {
@@ -66,7 +100,7 @@ function App() {
 
   if (!weatherData) return "App loading..."
   return (
-    <main className={styles.main}>
+    <main className={`${styles.main}`} style={bgImgStyles}>
       <h1 className={styles.heading}>Weather Info</h1>
       <FindCity handleClick={handleFindCity} toggleUnit={toggleUnit} />
       <WeatherInfo
