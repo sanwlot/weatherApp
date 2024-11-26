@@ -42,6 +42,11 @@ function App() {
       .then((data) => setCurrentCity(data[0]))
     if (recentCities.length < 5) {
       setRecentCities([...recentCities, cityName])
+    } else {
+      setRecentCities((prev) => {
+        prev.pop()
+        return [cityName, ...prev]
+      })
     }
   }
 
@@ -56,7 +61,11 @@ function App() {
         <ul>
           {recentCities &&
             recentCities.map((city, i) => (
-              <li onClick={() => handleFindCity(city)} key={i}>
+              <li
+                style={{ cursor: "pointer" }}
+                onClick={() => handleFindCity(city)}
+                key={i}
+              >
                 {city}
               </li>
             ))}

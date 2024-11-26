@@ -4,29 +4,21 @@ import WbSunnyIcon from "@mui/icons-material/WbSunny"
 // import CloudIcon from "@mui/icons-material/Cloud"
 
 export default function WeatherInfo({ weatherData }) {
-  // console.log("weatherData, from weatherInfo component: ", weatherData)
-
   const [isCelsius, setIsCelsius] = useState(true)
 
   let icon = <WbSunnyIcon />
-  // if (city.weatherCondition === "Rainy") {
-  //   icon = <ThunderstormIcon />
-  // }
-  // if (city.weatherCondition === "Cloudy") {
-  //   icon = <CloudIcon />
-  // }
 
   function handleClick() {
     setIsCelsius(!isCelsius)
   }
-  if (!weatherData) return "weather info Loading..."
+  if (!weatherData) return "info Loading..."
 
   return (
     <section>
       <button onClick={handleClick}>Celsius / Fahranheit</button>
-      <div>
-        <p>City Name: {weatherData.name}</p>
-      </div>
+      <h2>
+        {weatherData.name} {icon}
+      </h2>
       <div>
         <p>
           Current temperature:{" "}
