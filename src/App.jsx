@@ -34,7 +34,7 @@ function App() {
 
   console.log("APP, weatherData: ", weatherData)
 
-  function handleFindCity(cityName: string) {
+  function handleFindCity(cityName) {
     fetch(
       `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`
     )
@@ -76,35 +76,3 @@ function App() {
 }
 
 export default App
-
-// geoApi openWeather for getting ciry coordinates and more info
-//   {
-//     "name": "Jodhpur",
-//     "local_names": {
-//         "ml": "ജോധ്പൂർ",
-//         "hi": "जोधपुर",
-//         "he": "ג'ודפור",
-//         "sr": "Џодпур",
-//         "de": "Jodhpur",
-//         "fa": "جوداپور",
-//         "es": "Jodhpur",
-//         "ar": "جودبور",
-//         "ur": "جودھ پور",
-//         "ja": "ジョードプル",
-//         "en": "Jodhpur",
-//         "be": "Джадхпур",
-//         "kn": "ಜೋಧ್ಪುರ್",
-//         "te": "జోధ్‌పూర్",
-//         "zh": "焦特布尔",
-//         "gu": "જોધપુર",
-//         "pt": "Jodhpur",
-//         "pa": "ਜੋਧਪੁਰ",
-//         "ta": "சோத்பூர்",
-//         "uk": "Джодхпур",
-//         "ru": "Джодхпур"
-//     },
-//     "lat": 26.2967719,
-//     "lon": 73.0351433,
-//     "country": "IN",
-//     "state": "Rajasthan"
-// }
