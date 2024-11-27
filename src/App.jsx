@@ -58,7 +58,7 @@ function App() {
   const lat = coordinates.lattitude
   const lon = coordinates.longitude
 
-  const API_KEY = "8d9b428eb63ea3470f3456a531ec6235"
+  const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
 
   useEffect(() => {
     fetch(
@@ -67,7 +67,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => setWeatherData(data))
       .catch((e) => console.error(e))
-  }, [lat, lon, tempUnit])
+  }, [lat, lon, tempUnit, API_KEY])
 
   function handleFindCity(cityName) {
     if (!cityName) return
