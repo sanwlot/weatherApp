@@ -13,6 +13,12 @@ export default function FindCity({ handleClick, toggleUnit }) {
         value={city}
         onChange={(e) => setCity(e.target.value)}
         className={styles.input}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleClick(city)
+            setCity("")
+          }
+        }}
       />
       <ButtonGroup>
         <button
