@@ -6,6 +6,7 @@ import { FaCloudRain } from "react-icons/fa"
 import { BsCloudHaze } from "react-icons/bs"
 import RecentCities from "../RecentCities/RecentCities"
 import styles from "./WeatherInfo.module.css"
+
 export default function WeatherInfo({
   weatherData,
   recentCities,
@@ -13,7 +14,7 @@ export default function WeatherInfo({
   isMetric,
 }) {
   if (!weatherData.weather || weatherData.weather.length === 0) {
-    return "info Loading..."
+    return <div className={styles.spinner}></div>
   }
 
   let icon = <WbSunnyIcon />

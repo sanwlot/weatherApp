@@ -7,6 +7,7 @@ import cloudsImg from "./assets/bgImgs/clouds.jpg"
 import hazeImg from "./assets/bgImgs/haze.jpg"
 import snowImg from "./assets/bgImgs/snow.jpg"
 import rainImg from "./assets/bgImgs/rain.jpg"
+import { TbTemperatureSun } from "react-icons/tb"
 
 function App() {
   const [weatherData, setWeatherData] = useState({})
@@ -21,27 +22,38 @@ function App() {
   const [isMetric, setIsMetric] = useState(true)
 
   const tempUnit = isMetric ? "metric" : "imperial"
+  const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
+  const bgImg = getBgImg()
+  const coordinates = {
+    lattitude: currentCity.lat,
+    longitude: currentCity.lon,
+  }
+  const lat = coordinates.lattitude
+  const lon = coordinates.longitude
 
-  let bgImg
+  function getBgImg() {
+    let bgImg
 
-  try {
-    if (weatherData.weather[0].main === "Clear") {
-      bgImg = clearSkyImg
+    try {
+      if (weatherData.weather[0].main === "Clear") {
+        bgImg = clearSkyImg
+      }
+      if (weatherData.weather[0].main === "Clouds") {
+        bgImg = cloudsImg
+      }
+      if (weatherData.weather[0].main === "Rain") {
+        bgImg = rainImg
+      }
+      if (weatherData.weather[0].main === "Snow") {
+        bgImg = snowImg
+      }
+      if (weatherData.weather[0].main === "Haze") {
+        bgImg = hazeImg
+      }
+    } catch (error) {
+      console.log("could not load weather!", error)
     }
-    if (weatherData.weather[0].main === "Clouds") {
-      bgImg = cloudsImg
-    }
-    if (weatherData.weather[0].main === "Rain") {
-      bgImg = rainImg
-    }
-    if (weatherData.weather[0].main === "Snow") {
-      bgImg = snowImg
-    }
-    if (weatherData.weather[0].main === "Haze") {
-      bgImg = hazeImg
-    }
-  } catch (error) {
-    console.log("could not load weather!", error)
+    return bgImg
   }
 
   const bgImgStyles = {
@@ -49,16 +61,6 @@ function App() {
     backgroundSize: "cover",
     backgroundPosition: "center",
   }
-
-  const coordinates = {
-    lattitude: currentCity.lat,
-    longitude: currentCity.lon,
-  }
-
-  const lat = coordinates.lattitude
-  const lon = coordinates.longitude
-
-  const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
 
   useEffect(() => {
     fetch(
@@ -98,10 +100,12 @@ function App() {
     setIsMetric(!isMetric)
   }
 
-  if (!weatherData) return "App loading..."
+  if (!weatherData) return "hey App loading..."
   return (
     <main className={`${styles.main}`} style={bgImgStyles}>
-      <h1 className={styles.heading}>Weather Info</h1>
+      <h1 className={styles.heading}>
+        Weather Info <TbTemperatureSun />
+      </h1>
       <FindCity handleClick={handleFindCity} toggleUnit={toggleUnit} />
       <WeatherInfo
         isMetric={isMetric}

@@ -33,3 +33,21 @@
   font-weight: bold;
   font-size: 1.5rem;
 }
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border-top: 5px solid #333;
+  margin: 0 auto;
+  animation: spinner 100ms;
+}
+
+@keyframes spinner {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
