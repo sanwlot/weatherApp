@@ -2,11 +2,6 @@ import { useEffect, useState } from "react"
 import WeatherInfo from "./components/WeatherInfo/WeatherInfo"
 import FindCity from "./components/FindCity/FindCity"
 import styles from "./App.module.css"
-import clearSkyImg from "./assets/bgImgs/clear.jpg"
-import cloudsImg from "./assets/bgImgs/clouds.jpg"
-import hazeImg from "./assets/bgImgs/haze.jpg"
-import snowImg from "./assets/bgImgs/snow.jpg"
-import rainImg from "./assets/bgImgs/rain.jpg"
 import { TbTemperatureSun } from "react-icons/tb"
 
 const initialCity = {
@@ -26,7 +21,7 @@ function App() {
 
   const tempUnit = isMetric ? "metric" : "imperial"
   const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
-  const bgImg = getBgImg()
+  const linearGradient = getBgImg()
   const coordinates = {
     lattitude: currentCity.lat,
     longitude: currentCity.lon,
@@ -35,34 +30,29 @@ function App() {
   const lon = coordinates.longitude
 
   function getBgImg() {
-    let bgImg
-
     try {
       if (weatherData.weather[0].main === "Clear") {
-        bgImg = clearSkyImg
+        return "linear-gradient(0deg, #2298c3, #2d56fd)"
       }
       if (weatherData.weather[0].main === "Clouds") {
-        bgImg = cloudsImg
+        return "linear-gradient(120deg, #d3d3d3, #a9a9a9, #808080)"
       }
       if (weatherData.weather[0].main === "Rain") {
-        bgImg = rainImg
+        return "linear-gradient(135deg, #5d7ea3, #748a9c, #a3b1c6)"
       }
       if (weatherData.weather[0].main === "Snow") {
-        bgImg = snowImg
+        return "linear-gradient(135deg, #f0f8ff, #d9e9f2, #b9d6e5)"
       }
       if (weatherData.weather[0].main === "Haze") {
-        bgImg = hazeImg
+        return "linear-gradient(135deg, #d3d3d3, #c0c0c0, #a9a9a9)"
       }
     } catch (error) {
-      console.log("could not load weather!", error)
+      console.log("could not load weather background color!", error)
     }
-    return bgImg
   }
 
   const bgImgStyles = {
-    backgroundImage: `url(${bgImg})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    background: linearGradient,
   }
 
   useEffect(() => {
@@ -122,7 +112,6 @@ function App() {
     setIsMetric(!isMetric)
   }
 
-  if (!weatherData) return "hey App loading..."
   return (
     <main className={`${styles.main}`} style={bgImgStyles}>
       <h1 className={styles.heading}>
