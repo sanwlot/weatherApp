@@ -23,6 +23,7 @@ export default function FindCity({ handleClick, toggleUnit }) {
       <ButtonGroup>
         <button
           className="btn btn-secondary"
+          style={{ fontSize: "2rem", fontWeight: "bold" }}
           onClick={() => {
             handleClick(city)
             setCity("")

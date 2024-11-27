@@ -21,7 +21,7 @@ function App() {
 
   const tempUnit = isMetric ? "metric" : "imperial"
   const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
-  const linearGradient = getBgImg()
+  const linearGradient = getBackground()
   const coordinates = {
     lattitude: currentCity.lat,
     longitude: currentCity.lon,
@@ -29,7 +29,7 @@ function App() {
   const lat = coordinates.lattitude
   const lon = coordinates.longitude
 
-  function getBgImg() {
+  function getBackground() {
     try {
       if (weatherData.weather[0].main === "Clear") {
         return "linear-gradient(0deg, #2298c3, #2d56fd)"
@@ -51,7 +51,7 @@ function App() {
     }
   }
 
-  const bgImgStyles = {
+  const backgroundStyle = {
     background: linearGradient,
   }
 
@@ -113,7 +113,7 @@ function App() {
   }
 
   return (
-    <main className={`${styles.main}`} style={bgImgStyles}>
+    <main className={`${styles.main}`} style={backgroundStyle}>
       <h1 className={styles.heading}>
         Weather Info <TbTemperatureSun />
       </h1>

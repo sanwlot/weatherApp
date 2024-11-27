@@ -9,4 +9,6 @@
 .input {
   max-width: 700px;
   margin-right: 10px;
+  font-size: 2rem;
+  font-weight: bold;
 }
