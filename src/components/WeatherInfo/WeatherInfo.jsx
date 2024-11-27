@@ -12,9 +12,17 @@ export default function WeatherInfo({
   recentCities,
   handleFindCity,
   isMetric,
+  error,
 }) {
   if (!weatherData.weather || weatherData.weather.length === 0) {
     return <div className={styles.spinner}></div>
+  }
+  if (error) {
+    return (
+      <h2 style={{ textAlign: "center" }}>
+        The city name was invalid, try again.
+      </h2>
+    )
   }
 
   let icon = <WbSunnyIcon />
