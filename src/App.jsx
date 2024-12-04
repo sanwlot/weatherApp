@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import WeatherInfo from "./components/WeatherInfo/WeatherInfo"
 import FindCity from "./components/FindCity/FindCity"
 import styles from "./App.module.css"
 import { TbTemperatureSun } from "react-icons/tb"
+import { useQuery } from "@tanstack/react-query"
 
 const initialCity = {
   name: "Jodhpur",
@@ -13,7 +14,6 @@ const initialCity = {
 }
 
 function App() {
-  const [weatherData, setWeatherData] = useState({})
   const [currentCity, setCurrentCity] = useState(initialCity)
   const [recentCities, setRecentCities] = useState([])
   const [isMetric, setIsMetric] = useState(true)
@@ -29,21 +29,36 @@ function App() {
   const lat = coordinates.lattitude
   const lon = coordinates.longitude
 
+  const weatherQuery = useQuery({
+    queryKey: ["weatherData", lat, lon, tempUnit],
+    queryFn: async () => {
+      const res = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${tempUnit}`
+      )
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`)
+      }
+      return res.json()
+    },
+  })
+  console.log("currentCity:", currentCity)
+  console.log("weatherQuery data:", weatherQuery.data)
+
   function getBackground() {
     try {
-      if (weatherData.weather[0].main === "Clear") {
+      if (weatherQuery.data?.weather[0].main === "Clear") {
         return "linear-gradient(0deg, #2298c3, #2d56fd)"
       }
-      if (weatherData.weather[0].main === "Clouds") {
+      if (weatherQuery.data?.weather[0].main === "Clouds") {
         return "linear-gradient(120deg, #d3d3d3, #a9a9a9, #808080)"
       }
-      if (weatherData.weather[0].main === "Rain") {
+      if (weatherQuery.data?.weather[0].main === "Rain") {
         return "linear-gradient(135deg, #5d7ea3, #748a9c, #a3b1c6)"
       }
-      if (weatherData.weather[0].main === "Snow") {
+      if (weatherQuery.data?.weather[0].main === "Snow") {
         return "linear-gradient(135deg, #f0f8ff, #d9e9f2, #b9d6e5)"
       }
-      if (weatherData.weather[0].main === "Haze") {
+      if (weatherQuery.data?.weather[0].main === "Haze") {
         return "linear-gradient(135deg, #d3d3d3, #c0c0c0, #a9a9a9)"
       }
     } catch (error) {
@@ -54,20 +69,6 @@ function App() {
   const backgroundStyle = {
     background: linearGradient,
   }
-
-  useEffect(() => {
-    fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=${tempUnit}`
-    )
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`)
-        }
-        return res.json()
-      })
-      .then((data) => setWeatherData(data))
-      .catch((e) => console.error(e))
-  }, [lat, lon, tempUnit, API_KEY])
 
   function handleFindCity(cityName) {
     if (!cityName) return
@@ -119,9 +120,9 @@ function App() {
       </h1>
       <FindCity handleClick={handleFindCity} toggleUnit={toggleUnit} />
       <WeatherInfo
-        error={error}
+        error={weatherQuery.isError}
         isMetric={isMetric}
-        weatherData={weatherData}
+        weatherData={weatherQuery.data}
         recentCities={recentCities}
         handleFindCity={handleFindCity}
       />

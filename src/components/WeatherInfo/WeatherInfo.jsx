@@ -14,7 +14,7 @@ export default function WeatherInfo({
   isMetric,
   error,
 }) {
-  if (!weatherData.weather || weatherData.weather.length === 0) {
+  if (!weatherData?.weather || weatherData?.weather.length === 0) {
     return <div className={styles.spinner}></div>
   }
   if (error) {
